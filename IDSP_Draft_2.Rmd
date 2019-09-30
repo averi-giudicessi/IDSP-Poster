@@ -1,0 +1,133 @@
+---
+poster_height: "40in"
+poster_width: "42in"
+font_family: 'Rasa'
+#percent coverage of the poster
+main_topsize: 0.2 
+main_bottomsize: 0.12
+main_fontfamily: "Arial"
+#ESSENTIALS
+title: 'Developments in Motor and Sensory Function Before and After Neurorehabilitation Program in Babies with Neurological Risk'
+     
+author:
+  - name: 'Averi Giudicessi'
+    affil: 1
+    main: true
+    twitter: averigg 
+    email: 'averigiudicessi@gmail.com'
+  - name: 'Cristian Ibarra'
+    affil: 2
+    main: true
+    email: 'cristian.ibarra@uabc.edu.mx'
+  - name: 'Hector Pelayo'
+    affil: 3
+    main: true
+
+affiliation:
+  - num: 1
+    address: Department of Psychology, Benemérita Universidad Autónoma de Puebla
+  - num: 2
+    address: Department of Psychology, Benemérita Universidad Autónoma de Puebla
+  - num: 3
+    address: Department of Psychology, Benemérita Universidad Autónoma de Puebla
+main_findings:
+  - "Intervention Efforts Focused on Improving the Motor and Sensory Processes of Infants Help Control Neurological Risk by Way of External Environment Training."
+title_textsize: "80pt"
+
+
+logoleft_name: "Image/BUAP_LOGO.png"
+logoright_name: https&#58;//raw.githubusercontent.com/brentthorne/posterdown/master/images/betterhexlogo.png
+logocenter_name: 
+output: 
+  posterdown::posterdown_betterport:
+    self_contained: false
+    pandoc_args: --mathjax
+    number_sections: false
+bibliography: IDSP_Poster.bib
+link-citations: true
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,
+                      warning = FALSE,
+                      tidy = FALSE,
+                      message = FALSE,
+                      fig.align = 'center',
+                      out.width = "100%")
+options(knitr.table.format = "html") 
+```
+
+# Introduction
+
+Early detection of neurodevelopmental disorders is essential as these conditions impact various brain functions including: cognitive, language, motor, learning and behavioral processes [@cioni_early_2016]. 
+
+In recent years ample research in neurodevelopment has concentrated on the effects of environmental and experience stimulus on brain development and plasticity in infants [@cioni_early_2016; @walker_inequality_2011]. 
+
+More specifically, the newborn age is a crucial time in intervention of neurodevelopmental disorders to help prevent future manifestation of developmental conditions [@hartinger_impact_2017; @guralnick_why_2011].
+
+```{r, include=FALSE}
+knitr::write_bib(c('posterdown', 'rmarkdown','pagedown'), 'packages.bib')
+```
+
+## Objectives
+
+The objective of this study was to compare changes in motor and sensory abilities in infants with neurological risk after receiving an intervention program targeted at improving sensory and gross motor function. 
+
+# Methods
+
+Our study evaluated 152 babies with neurological risk at Hospital General de Cholula and Hospital del Norte in Puebla, México. 
+
+Babies included in the sample come from a low socioeconomic status and live in rural areas.  
+
+A pre and post evaluation was applied to babies that received a rehabilitative program from parents. 
+
+Rehabilitative program was based on the Katona systems that involves sensory and motor improvement exercises and was applied to participants 60 minutes every day (Monday to Sunday) for 7 months. 
+
+```{r fig.width=1, fig.height=1,echo=FALSE}
+library(png)
+library(grid)
+img <- readPNG("Image/Votja.png")
+ grid.raster(img)
+```
+
+# Results
+
+A paired-samples t-test was conducted to compare pre and post-test scores to measure advances in infants. There was a significant improvement in scores between the pre (M=10.99, SD=1.27) and post-test scores (M= 27.5, SD= 2.25); t(151)=85.28, p=0.001. 
+
+```{r, irisfigure, fig.cap='Pre-Post Test Outcomes', out.width="80%"}
+
+hector <- read.csv("Hector Database.csv", header = TRUE)
+View(hector)
+attach(hector)
+
+before <- c(X)
+after <- c(X.1)
+
+my_data <- data.frame(Group = rep(c("before", "after"), each = 154),
+TCC = c(before,  after))
+final = my_data[-c(153,154,307,308),]
+View(final)
+
+before <- subset(final,  Group == "before", TCC,
+                 drop = TRUE)
+after <- subset(final,  Group == "after", TCC,
+                drop = TRUE)
+
+
+
+library(PairedData)
+pd <- paired(before, after)
+plot(pd, type = "profile") + theme_bw()
+
+
+library("ggpubr")
+ggboxplot(final, x = "Group", y = "TCC", 
+          color = "Group", palette = c("#00AFBB", "#E7B800"),
+          order = c("before", "after"),
+          ylab = "TCC", xlab = "Group")
+
+```
+
+
+
+# References

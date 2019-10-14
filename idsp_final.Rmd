@@ -1,0 +1,165 @@
+---
+poster_height: "40in"
+poster_width: "42in"
+font_family: 'Rasa'
+#percent coverage of the poster
+main_topsize: 0.2 
+main_bottomsize: 0.12
+main_fontfamily: "Rasa"
+#ESSENTIALS
+title: 'Developments in Motor and Sensory Function Before and After Neurorehabilitation Program in Babies with Neurological Risk. P2-61'
+     
+author:
+  - name: 'Averi Giudicessi'
+    affil: 1
+    main: true
+    twitter: averigg 
+    email: 'averigiudicessi@gmail.com'
+  - name: 'Cristian Ibarra'
+    affil: 2
+    main: true
+    email: 'cristian.ibarra@uabc.edu.mx'
+  - name: 'Hector Pelayo'
+    affil: 3
+    main: true
+
+affiliation:
+  - num: 1
+    address: Department of Psychology, Benemérita Universidad Autónoma de Puebla
+  - num: 2
+    address: Department of Psychology, Benemérita Universidad Autónoma de Puebla
+  - num: 3
+    address: Department of Psychology, Benemérita Universidad Autónoma de Puebla
+main_findings:
+  - "Intervention Efforts Focused on Improving the Motor and Sensory Processes of Infants Help Control Neurological Risk by Way of External Environment Training."
+title_textsize: "80pt"
+
+
+logocenter_name: "Image/BUAP_LOGO.png"
+
+ 
+output: 
+  posterdown::posterdown_betterport:
+    self_contained: false
+    pandoc_args: --mathjax
+    number_sections: false
+bibliography: IDSP_Poster.bib
+link-citations: true
+
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,
+                      warning = FALSE,
+                      tidy = FALSE,
+                      message = FALSE,
+                      fig.align = 'center',
+                      out.width = "100%")
+options(knitr.table.format = "html") 
+```
+
+# Introduction
+
+Early detection of neurodevelopmental disorders is essential as these conditions impact various brain functions including: cognitive, language, motor, learning, and behavioral processes [@cioni_early_2016]. 
+
+In recent years ample research in neurodevelopment has concentrated on the effects of environmental and experience stimulus on brain development and plasticity in infants [@cioni_early_2016; @walker_inequality_2011]. 
+
+More specifically, the newborn age is a crucial time in the intervention of neurodevelopmental disorders to help prevent future manifestation of developmental conditions [@hartinger_impact_2017; @guralnick_why_2011].
+
+```{r, include=FALSE}
+knitr::write_bib(c('posterdown', 'rmarkdown','pagedown'), 'packages.bib')
+```
+
+## Objectives
+
+The objective of this study was to compare changes in motor and sensory abilities in infants with neurological risk factors after receiving an intervention program targeted at improving sensory and gross motor function. 
+
+# Methods
+Our study evaluated 152 babies with neurological risk factors at Hospital General de Cholula and Hospital del Norte in Puebla, México. Babies included in the sample reside in rural areas.   
+
+The two hospitals where the sample was treated are part of the public health system in México, specifically in the Seguro Popular Structure.  
+
+Rehabilitative program was based on the Katona system that involves sensory and motor improvement exercises and was applied to participants 60 minutes every day (Monday to Sunday) for 7 months. 
+
+Parents were trained in exercises by a professional in the Katona System and came to the hospital every 15 days for ongoing treatment. 
+
+A pre-evaluation and post-evaluation was applied to all participants to measure improvements. 
+
+
+```{r fig.width=1, fig.height=1.25,echo=FALSE, dpi= 900}
+library(png)
+library(grid)
+img <- readPNG("Image/hellbruge.png")
+ grid.raster(img)
+```
+
+# Results
+
+A paired-samples t-test was conducted to compare pre and post-test scores to measure advances in infants. There was a significant improvement in scores between the pre-test scores (M=10.99, SD=1.27) and post-test scores (M= 27.5, SD= 2.25); t(151)=85.28, p=0.001. 
+
+```{r, irisfigure, fig.cap='Pre & Post Evaluation Scores', out.width="80%"}
+
+hector <- read.csv("Hector Database.csv", header = TRUE)
+View(hector)
+attach(hector)
+library("ggpubr")
+library("tidyr")
+
+Before <- c(Pre.Test)
+After <- c(Post.Test)
+
+final <- data.frame(Group = rep(c("Before", "After"), each = 152), TCC = c(Before,  After))
+
+Before <- subset(final,  Group == "Before", TCC,
+                 drop = TRUE)
+
+After <- subset(final,  Group == "After", TCC,
+                drop = TRUE)
+
+
+final$Group <- factor(final$Group, levels = c('Before', 'After'))
+
+ggpaired(data=final, x = "Group", y = "TCC",
+         color = "#008080", line.color = "gray", line.size = 0.4,
+         palette = "npg", stat_compare_means(paried = TRUE))
+```
+
+```{r, irisfigure2, fig.cap='Pre & Post Evaluation Score Comparison by Exercise', out.width="90%"}
+#Bar graph Pre y Post test exercises#
+Pretest <- c(mean(PreTMcGrow), mean(PREgateoautomático), mean(PREplanoinclinado), mean(PREBauer), mean(`PREBauer.reforzado`), mean(PREEnderezamiento), mean(`PREMarcha.elemental`), mean(`PRESentado.en.airde`), mean(`PRELlevar.a.sentado`), mean(PREVerticalización))
+Posttest <- c(mean(POSMcGrow), mean(`POSGateo.Automático`), mean(POSPlanoinclinado), mean(POSBauer), mean(POSBauerreforzado), mean(POSEnderezamiento), mean(`POSMarcha.elemental`), mean(`POSSentado.en.aire`), mean(`POSLlevar.a.sentado`), mean(POSVerticalización))
+unit <- c("Mcgrow","Automatic crawling","Inclined plane","Bauer","Bauer reinforced","Straightening","Elemental Walk","Sitting in air","Rising to Sitting","Verticalization")
+df <- data.frame(unit, Pretest , Posttest)
+df.long <- gather(df, variable, value, -unit)
+
+#tidyr#
+ 
+
+
+#changing variable labels#
+df.long$unit <- factor(df.long$unit, levels = c(
+    "Mcgrow", "Automatic crawling", "Inclined plane", "Bauer", "Bauer reinforced", "Straightening", "Elemental Walk", "Sitting in air", "Rising to Sitting", "Verticalization"))
+
+  #tidyr#
+Ejercicios <- ggplot(data = df.long, aes(x = unit, y = value, fill = variable)) +
+    geom_col(position = position_dodge()) 
+  
+#changing theme#
+  
+Ejercicios <- ggplot(data = df.long, aes(x = unit, y = value, fill = variable)) +
+  geom_col(position = position_dodge()) +
+    scale_fill_manual(values=c("#008080", "#0b4545")) + theme_void()
+
+#Graph without X and Y values#
+
+Ejercicios + theme(axis.title.x=element_blank(), axis.title.y=element_blank(), axis.text.x = element_text(size = 10, angle = 45, hjust = 1))
+
+
+```
+
+# Acknowledgements
+This work was supported by scholarships from CONACYT to A.Giudicessi (#890272) & C.Ibarra (#889901).
+
+# References
+
+
